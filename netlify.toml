@@ -1,2 +1,4 @@
 [build]
   command = "yarn install --immutable"
+[functions]
+  included_files = ["!node_modules/A_LARGE_MODULE/**/*"]
