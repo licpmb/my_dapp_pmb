@@ -16,14 +16,16 @@ contract SimpleDEX is Ownable {
     IERC20 public tokenB;
 
     /// @notice Emitted when liquidity is added
+    /// @param user The address of the user adding liquidity
     /// @param amountA The amount of token A added
     /// @param amountB The amount of token B added
-    event LiquidityAdded(uint256 amountA, uint256 amountB);
+    event LiquidityAdded(address indexed user, uint256 amountA, uint256 amountB);
 
     /// @notice Emitted when liquidity is removed
+    /// @param user The address of the user removing liquidity
     /// @param amountA The amount of token A removed
     /// @param amountB The amount of token B removed
-    event LiquidityRemoved(uint256 amountA, uint256 amountB);
+    event LiquidityRemoved(address indexed user, uint256 amountA, uint256 amountB);
 
     /// @notice Emitted when a token swap occurs
     /// @param user The address of the user performing the swap
@@ -48,9 +50,9 @@ contract SimpleDEX is Ownable {
         require(amountA > 0 && amountB > 0, "Amounts must be > 0");
         tokenA.transferFrom(msg.sender, address(this), amountA);
         tokenB.transferFrom(msg.sender, address(this), amountB);
-
-        emit LiquidityAdded(amountA, amountB);
+        emit LiquidityAdded(msg.sender, amountA, amountB);
     }
+    
 
     /// @notice Removes liquidity from the pool
     /// @dev Only callable by the owner
@@ -61,8 +63,7 @@ contract SimpleDEX is Ownable {
 
         tokenA.transfer(msg.sender, amountA);
         tokenB.transfer(msg.sender, amountB);
-
-        emit LiquidityRemoved(amountA, amountB);
+        emit LiquidityRemoved(msg.sender, amountA, amountB);
     }
 
     /// @notice Swaps token A for token B
